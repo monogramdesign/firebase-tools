@@ -534,10 +534,11 @@ ${firebaseDefaults ? `__FIREBASE_DEFAULTS__=${JSON.stringify(firebaseDefaults)}\
       // TODO move to templates
       await writeFile(
         join(functionsDist, "server.js"),
-        // `require` here breaks functions that use "type": "module"
-        `const { onRequest } = require('firebase-functions/v2/https');
+        // TODO temp change for ESM compat
+        // using `require` and `exports` here breaks functions that use "type": "module"
+        `import { onRequest } from 'firebase-functions/v2/https';
 const server = import('firebase-frameworks');
-exports.ssr = onRequest((req, res) => server.then(it => it.handle(req, res)));
+export const ssr = onRequest((req, res) => server.then(it => it.handle(req, res)));
 `
       );
     } else {
