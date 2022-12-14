@@ -1,17 +1,29 @@
-import { copy } from "fs-extra";
+import { copy, readFile, existsSync } from "fs-extra";
 import { join } from "path";
-import { FrameworkType, SupportLevel } from "..";
-import { viteDiscoverWithNpmDependency } from "../vite";
+import { findDependency, FrameworkType, relativeRequire, SupportLevel } from "..";
+import { getConfig, viteDiscoverWithNpmDependency } from "../vite";
 // TODO figure out why relativeRequire was not working
 const { dynamicImport } = require(true && "../../dynamicImport");
 
 export const name = "SvelteKit";
 export const support = SupportLevel.Experimental;
 export const type = FrameworkType.MetaFramework;
-export { build } from "../vite";
-
 // export const init = initViteTemplate("svelte");
+
 export const discover = viteDiscoverWithNpmDependency("@sveltejs/kit");
+// export async function discover(dir: string) {
+//   if (!existsSync(join(dir, "package.json"))) return;
+//   if (!findDependency("@sveltejs/kit", { cwd: dir, depth: 0, omitDev: false })) return;
+
+//   const { publicDir: publicDirectory } = await getConfig(dir);
+
+//   return { publicDirectory, mayWantBackend: true };
+// }
+
+export async function build(root: string) {
+  const { build } = relativeRequire(root, "vite");
+  const result = await build({ root });
+}
 
 export async function ɵcodegenPublicDirectory(root: string, dest: string) {
   const config = await dynamicImport(join(root, "svelte.config.js"));
@@ -24,5 +36,10 @@ export async function ɵcodegenPublicDirectory(root: string, dest: string) {
 }
 
 export async function ɵcodegenFunctionsDirectory(sourceDir: string, destDir: string) {
-  console.log("codegenFunctionsDirectory sveltekit");
+  const packageJsonBuffer = await readFile(join(sourceDir, "package.json"));
+  const packageJson = JSON.parse(packageJsonBuffer.toString());
+
+  await copy(join(sourceDir, ".svelte-kit", "output", "server"), join(destDir));
+
+  return { packageJson: { ...packageJson }, frameworksEntry: "sveltekit" };
 }

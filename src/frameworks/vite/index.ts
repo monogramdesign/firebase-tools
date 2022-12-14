@@ -88,7 +88,7 @@ export async function getDevModeHandle(dir: string) {
   return proxyRequestHandler(await host, "Vite Development Server", { forceCascade: true });
 }
 
-async function getConfig(root: string) {
+export async function getConfig(root: string) {
   const { resolveConfig } = relativeRequire(root, "vite");
   return await resolveConfig({ root }, "build", "production");
 }
