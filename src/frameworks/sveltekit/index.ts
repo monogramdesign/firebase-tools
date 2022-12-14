@@ -23,6 +23,8 @@ export const discover = viteDiscoverWithNpmDependency("@sveltejs/kit");
 export async function build(root: string) {
   const { build } = relativeRequire(root, "vite");
   const result = await build({ root });
+  // TODO can we be smart about this?
+  return { wantsBackend: true };
 }
 
 export async function ɵcodegenPublicDirectory(root: string, dest: string) {
