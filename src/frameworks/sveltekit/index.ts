@@ -1,6 +1,6 @@
-import { copy, readFile, existsSync } from "fs-extra";
+import { copy, readFile } from "fs-extra";
 import { join } from "path";
-import { findDependency, FrameworkType, relativeRequire, SupportLevel } from "..";
+import { FrameworkType, relativeRequire, SupportLevel } from "..";
 import { getConfig, viteDiscoverWithNpmDependency } from "../vite";
 // TODO figure out why relativeRequire was not working
 const { dynamicImport } = require(true && "../../dynamicImport");
@@ -8,21 +8,12 @@ const { dynamicImport } = require(true && "../../dynamicImport");
 export const name = "SvelteKit";
 export const support = SupportLevel.Experimental;
 export const type = FrameworkType.MetaFramework;
-// export const init = initViteTemplate("svelte");
-
 export const discover = viteDiscoverWithNpmDependency("@sveltejs/kit");
-// export async function discover(dir: string) {
-//   if (!existsSync(join(dir, "package.json"))) return;
-//   if (!findDependency("@sveltejs/kit", { cwd: dir, depth: 0, omitDev: false })) return;
-
-//   const { publicDir: publicDirectory } = await getConfig(dir);
-
-//   return { publicDirectory, mayWantBackend: true };
-// }
+// export const init = initViteTemplate("svelte");
 
 export async function build(root: string) {
   const { build } = relativeRequire(root, "vite");
-  const result = await build({ root });
+  await build({ root });
   // TODO can we be smart about this?
   return { wantsBackend: true };
 }
