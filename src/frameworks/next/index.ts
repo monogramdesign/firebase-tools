@@ -353,7 +353,6 @@ export async function ɵcodegenFunctionsDirectory(
     // Alternatively I tried using @swc/spack and the webpack bundled into Next.js but was
     // encountering difficulties with both of those
     const dependencyTree: NpmLsReturn = JSON.parse(
-      // TODO isDevMode then do not use --omit=dev?
       spawnSync("npm", ["ls", "--omit=dev", "--all", "--json"], {
         cwd: sourceDir,
       }).stdout.toString()

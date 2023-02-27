@@ -484,10 +484,7 @@ export async function prepareFrameworks(
       packageJson.main = "server.js";
       delete packageJson.devDependencies;
       packageJson.dependencies ||= {};
-      // TODO I'm setting this to a path where my local tarball is stored
-      packageJson.dependencies["firebase-frameworks"] ||=
-        "file:/Users/chalo/monogram/firebase-framework-tools/firebase-frameworks-0.6.1.tgz";
-      // packageJson.dependencies["firebase-frameworks"] ||= FIREBASE_FRAMEWORKS_VERSION;
+      packageJson.dependencies["firebase-frameworks"] ||= FIREBASE_FRAMEWORKS_VERSION;
       packageJson.dependencies["firebase-functions"] ||= FIREBASE_FUNCTIONS_VERSION;
       packageJson.dependencies["firebase-admin"] ||= FIREBASE_ADMIN_VERSION;
       // Force the function to use the dependencies of the hosting codebase
