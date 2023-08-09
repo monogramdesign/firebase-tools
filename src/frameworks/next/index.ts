@@ -526,7 +526,7 @@ export async function ɵcodegenFunctionsDirectory(sourceDir: string, destDir: st
       }
     } catch (e: any) {
       console.warn(
-        "Unable to bundle next.config.js for use in Cloud Functions, proceeding with deploy but problems may be enountered."
+        "Unable to bundle next.config.js for use in Cloud Functions, proceeding with deploy but problems may be encountered."
       );
       console.error(e.message || e);
       copy(join(sourceDir, "next.config.js"), join(destDir, "next.config.js"));
